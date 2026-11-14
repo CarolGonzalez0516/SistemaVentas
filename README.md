@@ -1,5 +1,7 @@
 # BRYSA: sistema web de ventas e inventario con sugerencia de reposición asistida por IA
 
+[![CI](https://github.com/Ghost-sm/SistemaVentas/actions/workflows/test.yml/badge.svg)](https://github.com/Ghost-sm/SistemaVentas/actions/workflows/test.yml)
+
 > **Tablero Kanban del proyecto (GitHub Projects):** https://github.com/users/CarolGonzalez0516/projects/1
 > Columnas Por hacer, En progreso, En revisión y Hecho, con los issues priorizados (MoSCoW) y etiquetados por sesión. Está en la cuenta de una integrante porque este repositorio es de una cuenta personal y GitHub solo vincula aquí tableros de la misma cuenta.
 
@@ -86,6 +88,19 @@ Aplicación en <http://localhost:8000>. Al arrancar, el contenedor espera a MySQ
 ```bash
 php artisan test
 ```
+
+Las pruebas usan una base de datos MySQL aparte (la misma que en producción, porque algunas migraciones no funcionan en SQLite). Hay 20 pruebas:
+
+| Tipo | Archivo | Qué comprueba |
+|---|---|---|
+| Unitaria | `tests/Unit/MetodoPagoEnumTest.php` | Los métodos de pago aceptados (EFECTIVO y TARJETA) |
+| Unitaria | `tests/Unit/KardexTest.php` | El costo total del kardex (saldo por costo unitario) |
+| Unitaria | `tests/Unit/StoreVentaRequestTest.php` | Una venta sin productos no pasa la validación |
+| Integración (HTTP) | `tests/Feature/AutenticacionTest.php` | Inicio de sesión, usuario inactivo, invitado y permisos por rol (HU-01) |
+| Integración (HTTP) | `tests/Feature/RegistroVentaTest.php` | Registro de venta: sin caja abierta, datos inválidos y venta válida que baja el stock y escribe kardex y caja (HU-03) |
+| Integración (HTTP) | `tests/Feature/CategoriaControllerTest.php` | CRUD de categorías |
+
+El flujo de GitHub Actions (`.github/workflows/test.yml`) las ejecuta con PHP 8.4 y MySQL 8 en cada push y en cada pull request a `main`. El estado aparece en la insignia CI al inicio de este archivo.
 
 ## Configuración (variables de entorno)
 
