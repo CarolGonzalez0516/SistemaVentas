@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Caja;
 use App\Models\Inventario;
 use App\Models\User;
+use App\Models\Venta;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Permission;
@@ -149,6 +150,8 @@ class RegistroVentaTest extends TestCase
             ->assertSessionHas('success', 'Venta registrada');
 
         $this->assertDatabaseCount('ventas', 1);
+        // La venta recibe un número de comprobante con el formato B<caja> - <consecutivo>
+        $this->assertMatchesRegularExpression('/^B\d{3} - \d{7}$/', (string) Venta::first()->numero_comprobante);
         $this->assertDatabaseHas('producto_venta', [
             'producto_id' => $datos['producto_id'],
             'cantidad' => 2,
