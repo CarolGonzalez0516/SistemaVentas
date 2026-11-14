@@ -1,5 +1,8 @@
 # BRYSA: sistema web de ventas e inventario con sugerencia de reposición asistida por IA
 
+> **Tablero Kanban del proyecto (GitHub Projects):** https://github.com/users/CarolGonzalez0516/projects/1
+> Columnas Por hacer, En progreso, En revisión y Hecho, con los issues priorizados (MoSCoW) y etiquetados por sesión. Está en la cuenta de una integrante porque este repositorio es de una cuenta personal y GitHub solo vincula aquí tableros de la misma cuenta.
+
 Sistema web y API REST para la tienda de abarrotes **BRYSA**. Registra ventas de forma automatica (venta, detalle, inventario, kardex y caja en una sola transacción) y, a partir del historial de ventas, calcula cuántas unidades reponer de cada producto. Un modelo de lenguaje (opcional) redacta la explicación de la sugerencia. El sistema apoya la decisión del propietario: **no crea compras ni modifica existencias por su cuenta**.
 
 ## Caso de uso del MVP
