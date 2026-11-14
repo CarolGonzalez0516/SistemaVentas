@@ -1,39 +1,56 @@
-name: Run PHP Test
+name: CI
 
 on:
   push:
-    branches:
-      - main
+    branches: ['**']
+  pull_request:
+    branches: [main]
 
 jobs:
-  test:
+  pruebas:
+    name: Pruebas (PHPUnit)
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: password
+          MYSQL_DATABASE: testing
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -ppassword"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
+    env:
+      DB_CONNECTION: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_DATABASE: testing
+      DB_USERNAME: root
+      DB_PASSWORD: password
+
     steps:
-    - name: Checkout del repositorio
-      uses: actions/checkout@v2
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
 
-    - name: Configurar entorno PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.2.6'
-        extensions: mbstring, xml
-        coverage: none
+      - name: Configurar PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, pdo_mysql, gd, zip, intl, bcmath
+          coverage: none
 
-    - name: Instalar Dependencias
-      run: composer install --prefer-dist --no-scripts --no-progress --no-suggest
+      - name: Instalar dependencias
+        run: composer install --prefer-dist --no-progress --no-interaction
 
-    - name: Copiar archivo .env.example a .env
-      run: cp .env.example .env
+      - name: Preparar el archivo .env
+        run: |
+          cp .env.example .env
+          php artisan key:generate
 
-    - name: Generar clave de aplicación
-      run: php artisan key:generate
-
-    - name: Verificar dependencias seguras
-      run: composer require --dev roave/security-advisories:dev-latest --no-update
-
-    - name: Ejecutar Pruebas
-      run: vendor/bin/phpunit --testsuite Feature
-
-
-
+      - name: Ejecutar todas las pruebas
+        run: php artisan test
