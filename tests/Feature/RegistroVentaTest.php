@@ -59,13 +59,8 @@ class RegistroVentaTest extends TestCase
         ]);
         $ubicacionId = DB::table('ubicaciones')->insertGetId(['nombre' => 'Bodega']);
 
-        Inventario::create([
-            'producto_id' => $productoId,
-            'ubicacione_id' => $ubicacionId,
-            'cantidad' => 10,
-        ]);
-
-        // Registro de apertura del kardex: de aquí sale el costo unitario de la venta
+        // Apertura del kardex: va antes del inventario porque el InventarioObserver
+        // calcula el precio de venta con el último costo unitario del kardex
         DB::table('kardex')->insert([
             'producto_id' => $productoId,
             'tipo_transaccion' => 'APERTURA',
@@ -73,6 +68,12 @@ class RegistroVentaTest extends TestCase
             'entrada' => 10,
             'saldo' => 10,
             'costo_unitario' => 3,
+        ]);
+
+        Inventario::create([
+            'producto_id' => $productoId,
+            'ubicacione_id' => $ubicacionId,
+            'cantidad' => 10,
         ]);
 
         return [
