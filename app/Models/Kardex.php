@@ -58,7 +58,7 @@ class Kardex extends Model
             $saldo += $entrada;
         } elseif ($tipo == TipoTransaccionEnum::Venta || $tipo == TipoTransaccionEnum::Ajuste) {
             $salida = $data['cantidad'];
-            $saldo += $salida;
+            $saldo -= $salida;
         }
 
         try {
