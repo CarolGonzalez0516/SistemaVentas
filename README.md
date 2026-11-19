@@ -72,7 +72,7 @@ Requisitos: **PHP 8.4 o superior** (con las extensiones `zip`, `mbstring`, `open
 
    Si el proyecto está en `C:\laragon\www`, Laragon también lo publica en `http://SistemaVentas.test`.
 
-**Usuario de demostración:** `admin@gmail.com` / `12345678`. Es solo para la demo y debe cambiarse en cualquier uso real.
+**Usuario administrador:** se crea con el seeder a partir de `ADMIN_EMAIL` y `ADMIN_PASSWORD` del `.env`. Si `ADMIN_PASSWORD` no está definida, el seeder genera una clave aleatoria y la muestra una sola vez en consola. El formulario de inicio de sesión no trae ningún usuario ni contraseña prellenados.
 
 ### Opción B: Docker Compose
 

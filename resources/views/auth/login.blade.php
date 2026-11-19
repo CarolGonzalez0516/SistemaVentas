@@ -35,11 +35,11 @@
                                     <form action="{{route('login.login')}}" method="post">
                                         @csrf
                                         <div class="form-floating mb-3">
-                                            <input autofocus autocomplete="off" value="invitado@gmail.com" class="form-control" name="email" id="inputEmail" type="email" placeholder="name@example.com" />
+                                            <input autofocus autocomplete="username" value="{{ old('email') }}" class="form-control" name="email" id="inputEmail" type="email" placeholder="correo@ejemplo.com" required />
                                             <label for="inputEmail">Correo eléctronico</label>
                                         </div>
                                         <div class="form-floating mb-3">
-                                            <input class="form-control" name="password" value="12345678" id="inputPassword" type="password" placeholder="Password" />
+                                            <input class="form-control" name="password" id="inputPassword" type="password" placeholder="Contraseña" autocomplete="current-password" required />
                                             <label for="inputPassword">Contraseña</label>
                                         </div>
                                         <!--div class="form-check mb-3">
