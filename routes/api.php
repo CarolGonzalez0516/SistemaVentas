@@ -17,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+// Función de IA: sugerencia de reposición (requiere token de Sanctum)
+Route::middleware('auth:sanctum')->get('/ia/reposicion', \App\Http\Controllers\Api\ReposicionController::class)
+    ->name('api.ia.reposicion');

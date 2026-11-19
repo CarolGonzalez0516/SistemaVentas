@@ -89,7 +89,7 @@ Aplicación en <http://localhost:8000>. Al arrancar, el contenedor espera a MySQ
 php artisan test
 ```
 
-Las pruebas usan una base de datos MySQL aparte (la misma que en producción, porque algunas migraciones no funcionan en SQLite). Hay 20 pruebas:
+Las pruebas usan una base de datos MySQL aparte (la misma que en producción, porque algunas migraciones no funcionan en SQLite). Hay 24 pruebas:
 
 | Tipo | Archivo | Qué comprueba |
 |---|---|---|
@@ -99,8 +99,22 @@ Las pruebas usan una base de datos MySQL aparte (la misma que en producción, po
 | Integración (HTTP) | `tests/Feature/AutenticacionTest.php` | Inicio de sesión, usuario inactivo, invitado y permisos por rol (HU-01) |
 | Integración (HTTP) | `tests/Feature/RegistroVentaTest.php` | Registro de venta: sin caja abierta, datos inválidos y venta válida que baja el stock y escribe kardex y caja (HU-03) |
 | Integración (HTTP) | `tests/Feature/CategoriaControllerTest.php` | CRUD de categorías |
+| Integración (HTTP) | `tests/Feature/ReposicionIaTest.php` | Función de IA: acceso con token, cálculo del promedio móvil, uso del LLM simulado con `Http::fake()` sin enviar datos de clientes y respaldo por reglas si la API falla |
 
 El flujo de GitHub Actions (`.github/workflows/test.yml`) las ejecuta con PHP 8.4 y MySQL 8 en cada push y en cada pull request a `main`. El estado aparece en la insignia CI al inicio de este archivo.
+
+## Función de IA: sugerencia de reposición
+
+| Ruta | Autenticación |
+|---|---|
+| `GET /api/ia/reposicion?dias=28` | Token de Sanctum (`Authorization: Bearer <token>`) |
+| `GET /admin/ia/reposicion` | Sesión iniciada en la web |
+
+1. `ReposicionService` calcula por producto el promedio diario de unidades vendidas en la ventana, los días de cobertura del stock y la cantidad sugerida para cubrir `IA_DIAS_COBERTURA` días.
+2. `ExplicadorReposicion` envía al modelo de lenguaje solo productos y cifras de inventario (nunca datos de clientes) y devuelve la explicación. Si no hay llave o la API falla, responde con una explicación por reglas (`fuente_explicacion: "reglas"`).
+3. No se crean órdenes de compra ni se modifica el inventario: el propietario aprueba.
+
+Para obtener un token de prueba: `php artisan tinker` y luego `User::first()->createToken('demo')->plainTextToken`.
 
 ## Configuración (variables de entorno)
 
@@ -111,5 +125,6 @@ El flujo de GitHub Actions (`.github/workflows/test.yml`) las ejecuta con PHP 8.
 | `ANTHROPIC_API_KEY` | Clave del proveedor de lenguaje (solo si `IA_LLM_DRIVER=anthropic`) | vacía |
 | `ANTHROPIC_MODEL`, `IA_LLM_TIMEOUT` | Modelo y tiempo máximo de espera | configurables |
 | `IA_VENTANA_DIAS` | Días de historial del promedio móvil | `28` |
+| `IA_DIAS_COBERTURA`, `IA_DIAS_ALERTA` | Días que debe cubrir la reposición y umbral de urgencia | `14`, `5` |
 
 El archivo `.env` está en `.gitignore`: ninguna clave queda en el repositorio. Solo se versionan las plantillas sin credenciales.
