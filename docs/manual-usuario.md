@@ -23,7 +23,6 @@ BRYSA reemplaza los cuadernos de la tienda: registra productos, inventario y ven
 2. Ve a **Productos → Añadir nuevo registro**, escribe el nombre, la presentación (por ejemplo, unidad o paquete), la categoría y la marca, y pulsa **Guardar**.
 3. Ve a **Inventario → Inicializar producto**, elige el producto, la ubicación, la cantidad inicial y el costo unitario, y pulsa **Guardar**. Así queda la apertura del kardex y el precio de venta.
 
-![Inicio de sesión](img/manual/01-login.jpg)
 ![Panel principal](img/manual/02-panel.jpg)
 ![Stock de cada producto en el inventario](img/manual/03-inventario.jpg)
 
