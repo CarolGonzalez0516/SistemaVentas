@@ -58,6 +58,8 @@ Route::group(['middleware' => 'auth', 'prefix' => 'admin'], function () {
     Route::resource('empresa', EmpresaController::class)->only('index', 'update');
     Route::resource('empleados', EmpleadoController::class)->except('show');
     Route::resource('cajas', CajaController::class)->except('edit', 'update', 'show');
+    // Función de IA: sugerencia de reposición (JSON)
+    Route::get('/ia/reposicion', \App\Http\Controllers\Api\ReposicionController::class)->name('ia.reposicion');
     Route::resource('movimientos', MovimientoController::class)->except('show', 'edit', 'update', 'destroy');
 
     //Reportes
