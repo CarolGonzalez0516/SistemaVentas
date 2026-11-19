@@ -72,7 +72,7 @@ BRYSA reemplaza los cuadernos de la tienda: registra productos, inventario y ven
 |---|---|
 | “Credenciales incorrectas” al entrar | Revisa el correo y la contraseña. Si el usuario está inactivo, pide al administrador que lo active. |
 | No me deja registrar la venta | Abre primero una caja en **Cajas → Aperturar caja**. |
-| El producto no aparece en la venta | Inicialízalo en **Inventario** y verifica que tenga stock. |
+| El producto no aparece en la venta | Inicialízalo en **Inventario** y verifica que tenga stock. | 
 | La venta se rechaza por stock | La cantidad supera las existencias. Registra una compra o baja la cantidad. |
 | La sugerencia de IA sale vacía | No hay ventas en los últimos 28 días o ningún producto necesita reposición. Registra ventas o consulta con `?dias=90`. |
 | La explicación dice `"fuente_explicacion": "reglas"` | El modelo de lenguaje no está configurado o no respondió; las cifras siguen siendo válidas. |
