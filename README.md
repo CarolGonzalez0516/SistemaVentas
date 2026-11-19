@@ -5,6 +5,8 @@
 > **Tablero Kanban del proyecto (GitHub Projects):** https://github.com/users/CarolGonzalez0516/projects/1
 > Columnas Por hacer, En progreso, En revisión y Hecho, con los issues priorizados (MoSCoW) y etiquetados por sesión. Está en la cuenta de una integrante porque este repositorio es de una cuenta personal y GitHub solo vincula aquí tableros de la misma cuenta.
 
+> **Aplicación en línea:** https://sistemaventas-production-f40073b4.up.railway.app · **Manual de usuario:** [docs/manual-usuario.md](docs/manual-usuario.md)
+
 Sistema web y API REST para la tienda de abarrotes **BRYSA**. Registra ventas de forma automatica (venta, detalle, inventario, kardex y caja en una sola transacción) y, a partir del historial de ventas, calcula cuántas unidades reponer de cada producto. Un modelo de lenguaje (opcional) redacta la explicación de la sugerencia. El sistema apoya la decisión del propietario: **no crea compras ni modifica existencias por su cuenta**.
 
 ## Caso de uso del MVP
@@ -115,6 +117,18 @@ El flujo de GitHub Actions (`.github/workflows/test.yml`) las ejecuta con PHP 8.
 3. No se crean órdenes de compra ni se modifica el inventario: el propietario aprueba.
 
 Para obtener un token de prueba: `php artisan tinker` y luego `User::first()->createToken('demo')->plainTextToken`.
+
+## Despliegue en Railway (producción)
+
+La aplicación pública corre en [Railway](https://railway.com) con el `Dockerfile` del repositorio (PHP 8.4 + Apache) y una base de datos MySQL del mismo proyecto.
+
+1. En Railway: **New Project → Deploy from GitHub repo** y elegir este repositorio. Railway detecta el `Dockerfile`.
+2. Agregar el servicio **MySQL** al proyecto.
+3. En **Variables** del servicio web: `APP_KEY` (salida de `php artisan key:generate --show`), `APP_ENV=production`, `APP_DEBUG=false`, `APP_URL=https://${{RAILWAY_PUBLIC_DOMAIN}}`, `LOG_CHANNEL=stderr`, `DB_CONNECTION=mysql`, `DB_HOST=${{MySQL.MYSQLHOST}}`, `DB_PORT=${{MySQL.MYSQLPORT}}`, `DB_DATABASE=${{MySQL.MYSQLDATABASE}}`, `DB_USERNAME=${{MySQL.MYSQLUSER}}`, `DB_PASSWORD=${{MySQL.MYSQLPASSWORD}}`, `ADMIN_EMAIL`, `ADMIN_PASSWORD` y las variables de IA de la tabla siguiente.
+4. En **Settings → Deploy → Pre-deploy command**: `php artisan migrate --force`. La primera vez, ejecutar también `php artisan db:seed --force` para crear roles, permisos y el administrador.
+5. En **Settings → Networking → Generate Domain** con el puerto `8080`.
+
+La llave del modelo de lenguaje (`ANTHROPIC_API_KEY`) se define solo como variable del servicio en Railway; nunca se escribe en el repositorio.
 
 ## Configuración (variables de entorno)
 

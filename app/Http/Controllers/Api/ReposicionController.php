@@ -33,6 +33,6 @@ class ReposicionController extends Controller
             'explicacion' => $explicacion['texto'],
             'fuente_explicacion' => $explicacion['fuente'],
             'aviso' => 'Son sugerencias: no se crean órdenes de compra ni se modifica el inventario sin aprobación del propietario.',
-        ]);
+        ], 200, [], JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
     }
 }

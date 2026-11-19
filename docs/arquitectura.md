@@ -235,3 +235,21 @@ flowchart LR
 |---|---|---|
 | Aplicación y base de datos | `compose.yaml` | `.env` local, fuera del repositorio (`APP_KEY`, `DB_*`, `MAIL_*`) |
 | Pruebas automáticas | `.github/workflows/test.yml` | Ninguna; usa `.env.example` |
+
+### Producción (Railway)
+
+La URL pública es https://sistemaventas-production-f40073b4.up.railway.app. Railway construye la imagen con el `Dockerfile` del repositorio (PHP 8.4 + Apache) y la conecta a un servicio MySQL del mismo proyecto. Antes de cada despliegue ejecuta `php artisan migrate --force`.
+
+```mermaid
+flowchart LR
+    GH["GitHub<br/>rama desplegada"] -->|"push"| RW["Railway<br/>build con Dockerfile"]
+    USR["Usuarios (navegador)"] -->|"HTTPS"| APP["Servicio web<br/>PHP 8.4 + Apache · puerto 8080"]
+    RW --> APP
+    APP -->|"red privada"| DB[("MySQL de Railway")]
+    APP -->|"HTTPS, opcional"| LLM["API del modelo de lenguaje<br/>(Anthropic)"]
+```
+
+| Pieza | Dónde | Variables sensibles |
+|---|---|---|
+| Servicio web | `Dockerfile` | `APP_KEY`, `DB_*`, `ADMIN_PASSWORD`, `ANTHROPIC_API_KEY`: solo en las variables del servicio en Railway |
+| Base de datos | Servicio MySQL de Railway | Credenciales generadas por Railway y referenciadas con `${{MySQL.*}}` |

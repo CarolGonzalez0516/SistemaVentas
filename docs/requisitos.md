@@ -7,7 +7,7 @@ Autores: Carol Dahiana González Ceballos y Santiago Mejía Londoño · Versión
 
 BRYSA es una tienda de abarrotes de Yumbo que llevaba el inventario, las ventas y las compras en papel. Este sistema web (Laravel 12 + MySQL) reemplaza esos registros: el cajero registra cada venta en un punto de venta, el administrador registra las compras a proveedores, y el inventario, el kardex y la caja se actualizan solos con cada operación. El acceso se controla con usuarios y roles.
 
-La función con IA del proyecto es la **sugerencia de reposición**: a partir del historial de ventas, el sistema calcula cuántas unidades conviene reponer de cada producto y un modelo de lenguaje redacta la explicación. La sugerencia solo apoya la decisión del propietario: no crea compras ni modifica existencias por su cuenta. Esta función todavía no está implementada (se construye en la sesión S4).
+La función con IA del proyecto es la **sugerencia de reposición**: a partir del historial de ventas, el sistema calcula cuántas unidades conviene reponer de cada producto y un modelo de lenguaje redacta la explicación. La sugerencia solo apoya la decisión del propietario: no crea compras ni modifica existencias por su cuenta. Está implementada en `app/Services/Ia/` y se consulta en `/admin/ia/reposicion` o `GET /api/ia/reposicion`.
 
 **Usuarios:** administrador (propietario), cajero y encargado de inventario.
 
@@ -76,7 +76,7 @@ Como **propietario de la tienda**, quiero **consultar cuántas unidades reponer 
 - Dado que el proveedor del modelo de lenguaje no responde o no hay clave configurada, cuando se pide la sugerencia, entonces el sistema muestra igual la cantidad calculada con una explicación de plantilla (sin IA) y no falla.
 - Dada una sugerencia mostrada, cuando el propietario no la aprueba, entonces el sistema no crea ninguna compra ni cambia el inventario.
 
-Estado: **Pendiente** (sesión S4)
+Estado: **Hecha** (PR #22; probada con `tests/Feature/ReposicionIaTest.php`)
 
 ## Requisitos no funcionales
 
